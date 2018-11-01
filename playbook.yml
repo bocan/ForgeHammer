@@ -1,0 +1,25 @@
+---
+- hosts: all
+  gather_facts: false
+  tasks:
+    - name: "Check ansible version !=2.7.0"
+      assert:
+        msg: "Ansible V2.7.0 can't be used until: https://github.com/ansible/ansible/issues/46600 is fixed"
+        that:
+          - ansible_version.string is version("2.7.0", "!=")
+          - ansible_version.string is version("2.5.0", ">=")
+      tags:
+        - check
+  vars:
+    ansible_connection: local
+
+- hosts: all
+  any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
+  gather_facts: false
+  vars:
+    # Need to disable pipelining for bootstrap-os as some systems have requiretty in sudoers set, which makes pipelining
+    # fail. bootstrap-os fixes this on these systems, so in later plays it can be enabled.
+    ansible_ssh_pipelining: false
+  roles:
+    - { role: forgehammer-defaults}
+    - { role: bootstrap-os, tags: bootstrap-os}

@@ -1,0 +1,5 @@
+---
+bootstrap_os:
+os_family: "{{bootstrap_os}}"
+
+override_system_hostname: true

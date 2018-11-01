@@ -1,0 +1,15 @@
+---
+#  raw: cat /etc/issue.net | grep '{{ bootstrap_versions }}'
+
+- name: List ubuntu_packages
+  set_fact:
+    ubuntu_packages:
+      - python
+      - python-apt
+      - python-pip
+      - dbus
+
+- set_fact:
+    ansible_python_interpreter: "/usr/bin/python"
+  tags:
+    - facts
